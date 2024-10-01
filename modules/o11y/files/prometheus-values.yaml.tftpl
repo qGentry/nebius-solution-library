@@ -16,3 +16,10 @@ server:
     runAsGroup: 0
     runAsNonRoot: false
     runAsUser: 0
+  nodeSelector:
+    task: o11y  # Replace with your actual node selector key-value pairs
+  tolerations:
+    - key: "task"
+      operator: "Equal"
+      value: "o11y"
+      effect: "NoSchedule"  # Replace with your actual tolerations

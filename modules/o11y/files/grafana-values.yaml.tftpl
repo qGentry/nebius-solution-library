@@ -8,6 +8,13 @@ sidecar:
     maxLines: 1000
 image:
   tag: 10.4.4
+nodeSelector: 
+  task: o11y
+tolerations:
+  - key: "task"
+    operator: "Equal"
+    value: "o11y"
+    effect: "NoSchedule"
 persistence:
   type: pvc
   existingClaim: utility-grafana-pvc
@@ -96,3 +103,7 @@ datasources:
         isDefault: false
         version: 1
       %{~ endif ~}
+grafana.ini:
+  server:
+    root_url: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+    serve_from_sub_path: true
