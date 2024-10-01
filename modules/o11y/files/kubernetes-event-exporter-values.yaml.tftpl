@@ -1,0 +1,29 @@
+nodeSelector:
+  task: o11y
+tolerations:
+ - key: "task"
+   operator: "Equal"
+   value: "o11y"
+   effect: "NoSchedule"  # Replace with your actual tolerations
+config:
+  leaderElection: {}
+  logLevel: debug
+  logFormat: pretty
+  metricsNamePrefix: event_exporter_
+  receivers:
+    - name: "dump"
+      file:
+        path: "/dev/stdout"
+        layout: {}
+    - name: "loki"
+      loki:
+        url: "http://loki:3100/loki/api/v1/push"
+        streamLabels:
+          app: kube-api
+          source: event-exporter
+          container: event-exporter
+  route:
+    routes:
+      - match:
+        - receiver: "dump"
+        - receiver: "loki"
