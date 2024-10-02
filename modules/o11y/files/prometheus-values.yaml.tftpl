@@ -23,3 +23,8 @@ server:
       operator: "Equal"
       value: "o11y"
       effect: "NoSchedule"  # Replace with your actual tolerations
+extraScrapeConfigs: |
+  - job_name: 'node-resources-exporter'
+    metrics_path: '/'
+    static_configs:
+      - targets: ['node-resources-exporter:80']
