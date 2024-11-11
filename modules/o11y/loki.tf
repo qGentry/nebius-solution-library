@@ -29,4 +29,13 @@ resource "nebius_storage_v1_bucket" "loki-bucket" {
   parent_id         = var.parent_id
   name              = "loki-bucket-${random_string.loki_unique_id[0].result}"
   versioning_policy = "DISABLED"
+  lifecycle_configuration = {
+    rules = [ {
+      expiration = {
+        days = 30
+      }
+      id = "delete_older_30_days"
+      status = "ENABLED"
+    } ]
+  }
 }
