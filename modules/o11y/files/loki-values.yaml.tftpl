@@ -42,3 +42,11 @@ livenessProbe:
     path: /ready
     port: http-metrics
   initialDelaySeconds: 45
+nodeSelector:
+  task: o11y
+tolerations:
+  - key: "task"
+    operator: "Equal"
+    value: "o11y"
+    effect: "NoSchedule"
+replicas: 3
