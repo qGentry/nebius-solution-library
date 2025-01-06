@@ -7,7 +7,8 @@ prometheus-node-exporter:
   enabled: ${prometheus_node_exporter}
 kube-state-metrics:
   metricLabelsAllowlist:
-    - nodes=[nebius.com/group-name]
+    - nodes=[nebius.com/group-name,nebius.com/gpu,nebius.com/node-group-id,volcano.sh/cluster-name]
+    - pods=[started-by-host,instance-id]
 server:
   persistentVolume:
     existingClaim: utility-prometheus-pvc
