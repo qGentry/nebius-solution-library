@@ -5,7 +5,7 @@ resource "helm_release" "prometheus" {
   chart            = "prometheus"
   namespace        = var.namespace
   create_namespace = true
-  version          = "v19.7.2"
+  version          = "v25.24.1"
   atomic           = true
   values = [
     templatefile("${path.module}/files/prometheus-values.yaml.tftpl", {
