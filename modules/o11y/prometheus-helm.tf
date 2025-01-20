@@ -7,6 +7,7 @@ resource "helm_release" "prometheus" {
   create_namespace = true
   version          = "v25.24.1"
   atomic           = false
+  wait             = false
   values = [
     templatefile("${path.module}/files/prometheus-values.yaml.tftpl", {
       prometheus_node_exporter = var.o11y.prometheus.node_exporter
