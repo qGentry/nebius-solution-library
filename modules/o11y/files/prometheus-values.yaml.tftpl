@@ -18,11 +18,11 @@ server:
     runAsNonRoot: false
     runAsUser: 0
   nodeSelector:
-    task: o11y-prometheus  # Replace with your actual node selector key-value pairs
+    task: o11y  # Replace with your actual node selector key-value pairs
   tolerations:
     - key: "task"
       operator: "Equal"
-      value: "o11y-prometheus"
+      value: "o11y"
       effect: "NoSchedule"  # Replace with your actual tolerations
 extraScrapeConfigs: |
   - job_name: 'node-resources-exporter'
