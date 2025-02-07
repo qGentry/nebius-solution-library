@@ -1,26 +1,26 @@
 ---
 alertmanager:
   enabled: true
-  config:
-  global:
-    resolve_timeout: 5m
-
   persistence:
     size: 2Gi
 
-  route:
-    receiver: slack
-    group_by: ['alertname', 'cluster', 'service']
-    group_wait: 30s
-    group_interval: 5m
-    repeat_interval: 3h
+  config:
+    global:
+      resolve_timeout: 5m
 
-  receivers:
-    - name: slack
-      slack_configs:
-        - send_resolved: true
-          channel: "#ai-studio-finetuning-alerts"
-          api_url_file: "/etc/alertmanager/secrets/slack_api_url"
+    route:
+      receiver: slack
+      group_by: ['alertname', 'cluster', 'service']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 3h
+
+    receivers:
+      - name: slack
+        slack_configs:
+          - send_resolved: true
+            channel: "#ai-studio-finetuning-alerts"
+            api_url_file: "/etc/alertmanager/secrets/slack_api_url"
   extraSecretMounts:
   - name: alertmanager-slack
     secretName: alertmanager-slack
@@ -49,6 +49,15 @@ server:
       operator: "Equal"
       value: "o11y"
       effect: "NoSchedule"  # Replace with your actual tolerations
+  extraConfigmapMounts:
+    - name: alert-rules
+      configMap: prometheus-alert-rules
+      mountPath: /etc/prometheus/alert-rules
+      readOnly: true
+serverFiles:
+  prometheus.yml:
+    rule_files:
+      - /etc/prometheus/alert-rules/*.yaml
 extraScrapeConfigs: |
   - job_name: 'node-resources-exporter'
     metrics_path: '/'
