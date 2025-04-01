@@ -7,14 +7,24 @@ tolerations:
    effect: "NoSchedule"  # Replace with your actual tolerations
 config:
   leaderElection: {}
-  logLevel: debug
-  logFormat: pretty
+  logLevel: warn
+  logFormat: json
   metricsNamePrefix: event_exporter_
   receivers:
-    - name: "dump"
-      file:
-        path: "/dev/stdout"
-        layout: {}
+    - name: "stdout"
+      stdout:
+        layout:
+          # region: "man" # or other info with you wanna put
+          eventType: "kubernetes-event" # making easy to match in Loki queries
+          message: "{{ .Message }}"
+          reason: "{{ .Reason }}"
+          type: "{{ .Type }}"
+          count: "{{ .Count }}"
+          kind: "{{ .InvolvedObject.Kind }}"
+          name: "{{ .InvolvedObject.Name }}"
+          namespace: "{{ .Namespace }}"
+          component: "{{ .Source.Component }}"
+          hostname: "{{ .Source.Host }}"
     - name: "loki"
       loki:
         url: "http://loki:3100/loki/api/v1/push"
@@ -25,5 +35,5 @@ config:
   route:
     routes:
       - match:
-        - receiver: "dump"
         - receiver: "loki"
+        - receiver: "stdout"
